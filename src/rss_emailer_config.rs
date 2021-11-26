@@ -6,7 +6,7 @@ use std::fs;
 pub struct Config {
     pub smtp: SmtpConfig,
     pub rss_mail: RssMailConfig,
-    pub feeds: HashMap<String, Feed>,
+    pub feeds: HashMap<String, FeedDefinition>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -31,7 +31,7 @@ pub struct RssMailConfig {
 
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
-pub enum Feed {
+pub enum FeedDefinition {
     Simple(String),
     Detailed(FeedDetail),
 }
