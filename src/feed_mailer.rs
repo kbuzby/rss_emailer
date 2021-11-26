@@ -1,4 +1,4 @@
-use crate::rss_emailer_config::Config;
+use crate::rss_emailer_config::{Config, RssMailTo};
 use lettre::smtp::authentication::Credentials;
 use lettre::smtp::error::SmtpResult;
 use lettre::SmtpClient;
@@ -29,11 +29,12 @@ impl FeedMailer {
         }
         .to_string();
 
-        FeedMailer {
-            mailer,
-            to: config.rss_mail.to.join(";"),
-            from,
-        }
+        let to = match &config.rss_mail.to {
+            RssMailTo::Single(x) => x.to_string(),
+            RssMailTo::Multiple(x) => x.join(";"),
+        };
+
+        FeedMailer { mailer, to, from }
     }
 
     pub fn send_email(&mut self, channel: &str, item: &Item) -> SmtpResult {

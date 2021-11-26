@@ -17,8 +17,15 @@ pub struct SmtpConfig {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(untagged)]
+pub enum RssMailTo {
+    Single(String),
+    Multiple(Vec<String>),
+}
+
+#[derive(Debug, Deserialize)]
 pub struct RssMailConfig {
-    pub to: Vec<String>,
+    pub to: RssMailTo,
     pub from: Option<String>,
 }
 
