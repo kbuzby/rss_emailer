@@ -1,4 +1,4 @@
-use crate::rss_mailer_config::Config;
+use crate::rss_emailer_config::Config;
 use lettre::smtp::authentication::Credentials;
 use lettre::smtp::error::SmtpResult;
 use lettre::SmtpClient;

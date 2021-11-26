@@ -1,10 +1,12 @@
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::fs;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
     pub smtp: SmtpConfig,
     pub rss_mail: RssMailConfig,
+    pub feeds: HashMap<String, Feed>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -18,6 +20,25 @@ pub struct SmtpConfig {
 pub struct RssMailConfig {
     pub to: Vec<String>,
     pub from: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+pub enum Feed {
+    Simple(String),
+    Detailed(FeedDetail),
+}
+
+#[derive(Debug, Deserialize)]
+pub struct FeedDetail {
+    pub link: String,
+    pub feed_type: FeedType,
+}
+
+#[derive(Debug, Deserialize)]
+pub enum FeedType {
+    Rss,
+    Atom,
 }
 
 pub fn read_from_file(file: &str) -> Config {
