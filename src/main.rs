@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn get_config_path() -> Option<PathBuf> {
     if let Some(home_path) = home::home_dir() {
-        return Some(home_path.join(".rss_emailer"));
+        return Some(home_path.join(".config/rss_emailer/config"));
     }
     return None;
 }
