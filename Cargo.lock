@@ -1085,6 +1085,7 @@ dependencies = [
  "reqwest",
  "rss",
  "serde",
+ "serde_json",
  "toml",
 ]
 
