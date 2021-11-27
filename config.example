@@ -1,0 +1,23 @@
+[smtp]
+# SMTP config is used to configure the server emails should be sent through.
+server = "mail.example.com"
+user = "me@example.com"
+password = "password"
+
+[rss_mail]
+# Specify the user or users to send RSS updates to. 
+# This may be a single email, or an array of emails.
+to = "rss@example.com"
+
+# Specify the user that will appear as the "from" account on the emails.
+# If not specified then the `user` field of the SMTP config will be used.
+# from = "from@example.com"
+
+[feeds]
+# Feeds are a listing of key-value pairs of feed-name and URL to the feed
+# feed-name can be any string key used to identify the feed, it the feed
+# does not have a title then this will be used in place of the title.
+# As many feeds as you wish may be added in the following structure.
+# Example feed is listed below - remove this if you do not want to receive
+# updates for hanselman.com
+hanselman = "http://feeds.hanselman.com/ScottHanselman"
