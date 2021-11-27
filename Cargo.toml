@@ -1,8 +1,11 @@
 [package]
 name = "rss_emailer"
+description = "Utility to check RSS feeds and email new posts to configured addresses."
+license = "Apache-2.0"
 authors = ["Kyle Buzby <kyle@buzby.dev>"]
 version = "0.1.0"
 edition = "2021"
+readme = "./README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
