@@ -22,7 +22,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 } else {
                     &feed_name
                 };
-                send_if_new(&mut history, &mut mailer, title, &channel.items[0]);
+                for item in channel.items {
+                    send_if_new(&mut history, &mut mailer, title, &item);
+                }
             } else if let FeedDefinition::Detailed(_feed_detail) = feed_def {
                 /* TODO */
             }
