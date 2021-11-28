@@ -39,7 +39,6 @@ impl FeedMailer {
 
     pub fn send_email(&mut self, channel: &str, item: &Item) -> SmtpResult {
         let title = item.title.as_ref().unwrap();
-        println!("{}", title);
         let email = EmailBuilder::new()
             .to(self.to.to_string())
             .from(self.from.to_string())
