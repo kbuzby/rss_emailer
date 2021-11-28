@@ -1,3 +1,4 @@
+use log::info;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
@@ -48,8 +49,9 @@ pub enum FeedType {
     Atom,
 }
 
-pub fn read_from_file(file: &str) -> Config {
+pub fn read_from_file(file: &str) -> Result<Config, Box<dyn std::error::Error>> {
+    info!("Reading config from {}.", file);
     let config_file = fs::read_to_string(file);
-    let config: Config = toml::from_str(&config_file.unwrap()).unwrap();
-    return config;
+    let config: Config = toml::from_str(&config_file?)?;
+    return Ok(config);
 }
