@@ -58,8 +58,10 @@ fn send_feed_items(
 fn get_channel_for_link(feed_link: String) -> Result<Channel, Box<dyn Error>> {
     debug!("Retrieving channel from {}.", feed_link);
     let content = reqwest::blocking::get(feed_link)?.bytes()?;
-    let channel = Channel::read_from(&content[..])?;
-    Ok(channel)
+    match Channel::read_from(&content[..]) {
+        Ok(x) => Ok(x),
+        Err(e) => Err(std::boxed::Box::new(e)),
+    }
 }
 
 fn send_if_new(history: &mut FeedHistory, mailer: &mut FeedMailer, feed_name: &str, item: &Item) {
@@ -80,35 +82,23 @@ fn send_if_new(history: &mut FeedHistory, mailer: &mut FeedMailer, feed_name: &s
 }
 
 fn get_config() -> Result<rss_emailer_config::Config, Box<dyn Error>> {
-    if let Some(config_path) = get_config_path() {
-        if let Some(config_path_str) = config_path.to_str() {
-            return rss_emailer_config::read_from_file(config_path_str);
-        }
-    }
-    Err(From::from("Unable to get configuration."))
+    let config_path = get_config_path().unwrap();
+    let config_path_str = config_path.to_str().unwrap();
+    return rss_emailer_config::read_from_file(config_path_str);
 }
 
 fn get_config_path() -> Option<PathBuf> {
     debug!("Getting config path from home directory.");
-    if let Some(home_path) = home::home_dir() {
-        return Some(home_path.join(".config/rss_emailer/config"));
-    }
-    return None;
+    return Some(home::home_dir()?.join(".config/rss_emailer/config"));
 }
 
 fn get_history() -> Result<FeedHistory, Box<dyn Error>> {
-    if let Some(history_path) = get_history_path() {
-        if let Some(history_path_str) = history_path.to_str() {
-            return Ok(FeedHistory::get_or_create(history_path_str));
-        }
-    }
-    Err(From::from("Unable to get history file."))
+    let history_path = get_history_path().unwrap();
+    let history_path_str = history_path.to_str().unwrap();
+    return Ok(FeedHistory::get_or_create(history_path_str));
 }
 
 fn get_history_path() -> Option<PathBuf> {
     debug!("Getting history path from home directory.");
-    if let Some(home_path) = home::home_dir() {
-        return Some(home_path.join(".config/rss_emailer/history"));
-    }
-    return None;
+    return Some(home::home_dir()?.join(".config/rss_emailer/history"));
 }
