@@ -35,7 +35,7 @@ impl FeedHistory {
             let config_file = fs::read_to_string(path);
             return Some(serde_json::from_str::<FeedHistory>(&config_file.unwrap()).unwrap());
         }
-        info!("Feed history does not exist.");
+        debug!("Feed history does not exist.");
         return None;
     }
 
