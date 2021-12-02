@@ -47,6 +47,6 @@ impl FeedMailer {
             .build()
             .unwrap();
 
-        return self.mailer.send(email.into());
+        self.mailer.send(email.into())
     }
 }

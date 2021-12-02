@@ -36,7 +36,7 @@ impl FeedHistory {
             return Some(serde_json::from_str::<FeedHistory>(&config_file.unwrap()).unwrap());
         }
         debug!("Feed history does not exist.");
-        return None;
+        None
     }
 
     pub fn save_to_disk(&self) -> Result<(), Box<dyn std::error::Error>> {
