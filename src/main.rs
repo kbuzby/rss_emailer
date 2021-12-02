@@ -27,9 +27,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut history = get_history()?;
     for (feed_name, feed_def) in config.feeds {
         if let FeedDefinition::Simple(feed_link) = feed_def {
-            match send_feed_items(feed_link, &feed_name, &mut history, &mut mailer) {
-                Err(e) => error!("Failure sending items for feed {}. {}.", &feed_name, e),
-                _ => (),
+            if let Err(e) = send_feed_items(feed_link, &feed_name, &mut history, &mut mailer) {
+                error!("Failure sending items for feed {}. {}.", &feed_name, e)
             };
         }
     }
@@ -68,7 +67,7 @@ fn send_if_new(history: &mut FeedHistory, mailer: &mut FeedMailer, feed_name: &s
     let item_title = item.title.as_ref().unwrap();
     if !history.item_sent(feed_name, item_title) {
         info!("Sending new item {} for feed {}.", item_title, feed_name);
-        if let Ok(_) = mailer.send_email(feed_name, item) {
+        if mailer.send_email(feed_name, item).is_ok() {
             history.track_item(feed_name, item_title);
         } else {
             error!(
@@ -84,21 +83,21 @@ fn send_if_new(history: &mut FeedHistory, mailer: &mut FeedMailer, feed_name: &s
 fn get_config() -> Result<rss_emailer_config::Config, Box<dyn Error>> {
     let config_path = get_config_path().unwrap();
     let config_path_str = config_path.to_str().unwrap();
-    return rss_emailer_config::read_from_file(config_path_str);
+    rss_emailer_config::read_from_file(config_path_str)
 }
 
 fn get_config_path() -> Option<PathBuf> {
     debug!("Getting config path from home directory.");
-    return Some(home::home_dir()?.join(".config/rss_emailer/config"));
+    Some(home::home_dir()?.join(".config/rss_emailer/config"))
 }
 
 fn get_history() -> Result<FeedHistory, Box<dyn Error>> {
     let history_path = get_history_path().unwrap();
     let history_path_str = history_path.to_str().unwrap();
-    return Ok(FeedHistory::get_or_create(history_path_str));
+    Ok(FeedHistory::get_or_create(history_path_str))
 }
 
 fn get_history_path() -> Option<PathBuf> {
     debug!("Getting history path from home directory.");
-    return Some(home::home_dir()?.join(".config/rss_emailer/history"));
+    Some(home::home_dir()?.join(".config/rss_emailer/history"))
 }
