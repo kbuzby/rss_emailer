@@ -57,10 +57,7 @@ fn send_feed_items(
 fn get_channel_for_link(feed_link: String) -> Result<Channel, Box<dyn Error>> {
     debug!("Retrieving channel from {}.", feed_link);
     let content = reqwest::blocking::get(feed_link)?.bytes()?;
-    match Channel::read_from(&content[..]) {
-        Ok(x) => Ok(x),
-        Err(e) => Err(std::boxed::Box::new(e)),
-    }
+    Ok(Channel::read_from(&content[..])?)
 }
 
 fn send_if_new(history: &mut FeedHistory, mailer: &mut FeedMailer, feed_name: &str, item: &Item) {
