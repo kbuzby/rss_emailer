@@ -23,7 +23,7 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
     - name: Publish crate
-      if: ${{ env.GITHUB_EVENT_TYPE == 'release' }}
+      if: ${{ env.GITHUB_EVENT_NAME == 'release' }}
       run: cargo publish --token ${CRATES_TOKEN}
       env:
         CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
