@@ -1,0 +1,49 @@
+on:
+  push:
+    tags: 
+    - 'v*'
+
+name: Create release
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Publish crate
+      run: cargo publish --token ${CRATES_TOKEN}
+      env:
+        CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+    - name: Install cargo-deb
+      run: cargo install cargo-deb
+    - name: Create .deb
+      id: build_deb
+      run: |
+        output=$(cargo deb)
+        echo "::set-output name=asset_path::$output"
+        echo "::set-output name=asset_file::$(basename $output)"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ${{ steps.build_deb.outputs.asset_path }}
+        asset_name: ${{ steps.build_deb.outputs.asset_file }}
+        asset_content_type: application/vnd.debian.binary-package
