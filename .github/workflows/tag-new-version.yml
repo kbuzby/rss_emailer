@@ -19,5 +19,6 @@ jobs:
       run: cargo install toml-cli
     - uses: salsify/action-detect-and-tag-new-version@v2
       with:
+        tag-annotation-template: ""
         version-command: |
           toml get ./Cargo.toml package.version | tr -d '"'
