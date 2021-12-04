@@ -17,7 +17,7 @@ jobs:
         fetch-depth: 2
     - name: Install toml-cli
       run: cargo install toml-cli
-    - uses: salsify/action-detect-and-tag-new-version@a0b3ff15a335acf6bf9e8db27036ea642561e43a
+    - uses: salsify/action-detect-and-tag-new-version@v2
       with:
         version-command: |
           toml get ./Cargo.toml package.version | tr -d '"'
