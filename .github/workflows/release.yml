@@ -1,4 +1,4 @@
-name: Tag new versions on main
+name: Tag and Release New Versions
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         version-command: |
           toml get ./Cargo.toml package.version | tr -d '"'
     outputs:
-      newTag: ${{ steps.detect_version.tag }}
+      newTag: ${{ steps.detect_version.outputs.tag }}
 
   release:
     name: Release New Version
