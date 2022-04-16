@@ -1076,12 +1076,13 @@ dependencies = [
 
 [[package]]
 name = "rss_emailer"
-version = "0.1.1"
+version = "0.1.7"
 dependencies = [
  "home",
  "lettre",
  "lettre_email",
  "log",
+ "native-tls",
  "quick-xml",
  "reqwest",
  "rss",
