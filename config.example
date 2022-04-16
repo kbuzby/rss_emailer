@@ -3,6 +3,7 @@
 server = "mail.example.com"
 user = "me@example.com"
 password = "password"
+#port = 465
 
 [rss_mail]
 # Specify the user or users to send RSS updates to. 

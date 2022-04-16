@@ -13,6 +13,7 @@ pub struct Config {
 #[derive(Debug, Deserialize)]
 pub struct SmtpConfig {
     pub server: String,
+    pub port: Option<u16>,
     pub user: String,
     pub password: String,
 }
