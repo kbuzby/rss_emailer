@@ -1076,7 +1076,7 @@ dependencies = [
 
 [[package]]
 name = "rss_emailer"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "home",
  "lettre",
